@@ -100,7 +100,7 @@ function New() {
   return (
     <div>
       <Header />
-      <div className='p-2 mt-[72px]'>
+      <div className='p-2 mt-[72px] sm:mt-[200px] max-w-lg mx-auto'>
         <form className='rounded-md bg-gray-200 flex flex-col p-3 gap-4' onSubmit={handleSubmit}>
           <h1 className='font-bold text-center text-blue-700 text-2xl p-4'>Add new task</h1>
           <input
