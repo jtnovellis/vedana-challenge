@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../components/common/Button';
 import ErrorMessage from '../components/ErrorMessage';
 import Header from '../components/Header';
-import { createTask } from '../components/services/tasks';
+import { createTask } from '../services/tasks';
 import Tag from '../components/Tag';
 import { initialTaskValues, errorValues } from '../constants/initialTaskValues';
 import { TaskContext } from '../context/TaskContext';
@@ -117,7 +117,7 @@ function New() {
             type='date'
             id='endDate'
             name='endDate'
-            className='p-2 focus:outline-none rounded-md'
+            className='p-2 focus:outline-none rounded-md placeholder:text-gray-400'
             value={newTask.endDate}
             onChange={handleChange}
           />
@@ -127,8 +127,8 @@ function New() {
               type='text'
               id='tag'
               name='tag'
-              placeholder='Add tag'
-              className='rounded-md placeholder:p-2 focus:outline-none p-2'
+              placeholder='Type a tag'
+              className='rounded-md placeholder:p-2 focus:outline-none p-2 w-[15rem]'
               value={tag}
               onChange={(e) => setTag(e.target.value)}
             />
@@ -144,7 +144,7 @@ function New() {
           {newTask.tags.length > 0 ? (
             <ul className='flex flex-wrap gap-2'>{rendertags}</ul>
           ) : (
-            <p>No tags</p>
+            <p className='text-center p-4 font-bold text-gray-500'>No tags</p>
           )}
           <Button type='submit'>Create task</Button>
         </form>

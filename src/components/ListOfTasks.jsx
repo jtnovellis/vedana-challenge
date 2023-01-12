@@ -1,10 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Task from './Task';
-import { TaskContext } from '../context/TaskContext';
 
-function ListOfTasks() {
-  const { tasks, newData } = useContext(TaskContext);
-
+function ListOfTasks({ tasks, newData }) {
   function removeTask(id) {
     const newTasks = tasks.filter((task) => task.id !== id);
     newData(newTasks);

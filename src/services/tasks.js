@@ -1,6 +1,7 @@
 import localforage from 'localforage';
+import { createTag } from './tags';
 
-function setStorage(tasks) {
+function setTaskStorage(tasks) {
   return localforage.setItem('tasks', tasks);
 }
 
@@ -19,7 +20,7 @@ export async function updateTask(id, newData) {
     ...newData,
   };
   tasks.splice(index, 1, newTask);
-  await setStorage(tasks);
+  await setTaskStorage(tasks);
   return newTask;
 }
 
@@ -34,7 +35,11 @@ export async function createTask({ description, endDate, tags }) {
     status: 'pending',
   };
   tasks.unshift(task);
-  await setStorage(tasks);
+  for (let i = 0; i < tags.length; i++) {
+    const tag = tags[i];
+    await createTag(tag);
+  }
+  await setTaskStorage(tasks);
   return task;
 }
 
@@ -43,7 +48,7 @@ export async function deleteTask(id) {
   const index = tasks.findIndex((task) => task.id === id);
   if (index > -1) {
     tasks.splice(index, 1);
-    await setStorage(tasks);
+    await setTaskStorage(tasks);
     return true;
   }
   return false;

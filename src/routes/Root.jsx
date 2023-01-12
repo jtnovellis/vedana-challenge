@@ -1,15 +1,82 @@
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
+import DropDown from '../components/DropDown';
 import Header from '../components/Header';
 import ListOfTasks from '../components/ListOfTasks';
-import { filterOptions } from '../constants/filterOptions';
+import { TaskContext } from '../context/TaskContext';
+import { statusFilter } from '../constants/filterOptions';
+import { getTags } from '../services/tags';
+import DropDStatus from '../components/DropDStatus';
+import { getTasks } from '../services/tasks';
 
 function Root() {
-  const filters = filterOptions.map((filter, i) => (
-    <li key={`${filter}-${i}`} className='lg:w-full'>
-      <Button>{filter}</Button>
-    </li>
-  ));
+  const [tags, setTags] = useState([]);
+  const [taskToRender, setTaskToRender] = useState([]);
+  const [tagFilter, setTagFilter] = useState('');
+  const [filterDropdown, setFilterDropdowm] = useState({
+    tags: false,
+    endData: false,
+    status: false,
+  });
+
+  useEffect(() => {
+    (async () => {
+      const allTasks = await getTasks();
+      setTaskToRender(allTasks);
+    })();
+  }, []);
+
+  const filtered = useMemo(() => {
+    return taskToRender.filter((task) => {
+      const newtask = task.tags.find((tag) => tag.name === tagFilter);
+      if (!newtask) return false;
+      return true;
+    });
+  }, [tagFilter]);
+
+  console.log(filtered);
+
+  useEffect(() => {
+    (async () => {
+      const allTags = await getTags();
+      setTags(allTags);
+    })();
+  }, []);
+
+  function handleTagFilter(tag) {
+    setTagFilter(tag);
+  }
+
+  function handleFilter(filter) {
+    switch (filter) {
+      case 'Tags':
+        setFilterDropdowm((prev) => ({
+          tags: !prev.tags,
+          endData: false,
+          status: false,
+        }));
+        break;
+      case 'Status':
+        setFilterDropdowm((prev) => ({
+          status: !prev.status,
+          tags: false,
+          endData: false,
+        }));
+        break;
+      case 'End today':
+        setFilterDropdowm((prev) => ({
+          endData: !prev.endData,
+          status: false,
+          tags: false,
+        }));
+        break;
+      default:
+        break;
+    }
+  }
+
+  function newData() {}
 
   return (
     <div>
@@ -24,7 +91,19 @@ function Root() {
           </Link>
           <div>
             <p className='text-blue-700 font-bold mb-2'>Filter by:</p>
-            <ul className='flex justify-around lg:flex-col lg:gap-10 lg:items-center'>{filters}</ul>
+            <ul className='flex justify-around lg:flex-col lg:gap-10 lg:items-center'>
+              <li className='lg:w-full relative'>
+                <Button handleFilter={handleFilter}>Tags</Button>
+                {filterDropdown.tags && <DropDown data={tags} handleTag={handleTagFilter} />}
+              </li>
+              <li className='lg:w-full relative'>
+                <Button handleFilter={handleFilter}>Status</Button>
+                {filterDropdown.status && <DropDStatus data={statusFilter} />}
+              </li>
+              <li className='lg:w-full relative'>
+                <Button handleFilter={handleFilter}>End today</Button>
+              </li>
+            </ul>
           </div>
         </div>
         <div className='p-3 mt-[226px] sm:mt-[242] lg:ml-[20rem] lg:mt-[88px]'>
@@ -32,7 +111,7 @@ function Root() {
             <h1 className='font-bold text-blue-700 text-2xl p-4'>Task board</h1>
             <div className='border border-t border-gray-300' />
             <div className=''>
-              <ListOfTasks />
+              <ListOfTasks tasks={filtered} newData={newData} />
             </div>
           </div>
         </div>

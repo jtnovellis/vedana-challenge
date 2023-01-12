@@ -4,7 +4,7 @@ import {
   MdPanoramaFishEye,
   MdOutlineCheckCircleOutline,
 } from 'react-icons/md';
-import { deleteTask, updateTask } from './services/tasks';
+import { deleteTask, updateTask } from '../services/tasks';
 import Tag from './Tag';
 
 function Task({ id, description, endDate, status, tags, removeTask }) {
