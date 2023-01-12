@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   return (
-    <header className='bg-blue-700 w-full p-4'>
+    <header className='bg-blue-700 w-full p-4 fixed top-0 z-20'>
       <Link to='/'>
         <MdGrading size={40} color='#fff' />
       </Link>
