@@ -6,7 +6,6 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
-    loader: loaderTasks,
   },
   {
     path: '/new',

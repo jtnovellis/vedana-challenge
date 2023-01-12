@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../components/common/Button';
+import ErrorMessage from '../components/ErrorMessage';
 import Header from '../components/Header';
+import { createTask } from '../components/services/tasks';
 import Tag from '../components/Tag';
-import { initialTaskValues } from '../constants/initialTaskValues';
+import { initialTaskValues, errorValues } from '../constants/initialTaskValues';
 
 function New() {
   const [tag, setTag] = useState('');
   const [newTask, setNewTask] = useState(initialTaskValues);
+  const [errorTask, setErrorTask] = useState(errorValues);
+  const navigate = useNavigate();
 
   function handleTag() {
     if (tag === '') return;
@@ -19,6 +24,7 @@ function New() {
       tags: [...prev.tags, newTag],
     }));
     setTag('');
+    validations();
   }
 
   function deleteTag(id) {
@@ -31,7 +37,13 @@ function New() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(newTask);
+    validations();
+    if (newTask.description !== '' && newTask.endDate !== '' && newTask.tags !== 0) {
+      console.log('click');
+      createTask(newTask);
+      setNewTask(initialTaskValues);
+      navigate('/');
+    }
   }
 
   function handleChange(e) {
@@ -39,6 +51,42 @@ function New() {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  }
+
+  function validations() {
+    if (newTask.description === '') {
+      setErrorTask((prev) => ({
+        ...prev,
+        description: 'Must to have a description',
+      }));
+    } else {
+      setErrorTask((prev) => ({
+        ...prev,
+        description: null,
+      }));
+    }
+    if (newTask.endDate === '') {
+      setErrorTask((prev) => ({
+        ...prev,
+        endDate: 'Must to have a end date',
+      }));
+    } else {
+      setErrorTask((prev) => ({
+        ...prev,
+        endDate: null,
+      }));
+    }
+    if (newTask.tags.length === 0) {
+      setErrorTask((prev) => ({
+        ...prev,
+        tags: 'Must to have at least one tag',
+      }));
+    } else {
+      setErrorTask((prev) => ({
+        ...prev,
+        tags: null,
+      }));
+    }
   }
 
   const rendertags = newTask.tags.map((tag) => (
@@ -62,6 +110,7 @@ function New() {
             value={newTask.description}
             onChange={handleChange}
           />
+          {errorTask.description && <ErrorMessage>{errorTask.description}</ErrorMessage>}
           <input
             type='date'
             id='endDate'
@@ -70,6 +119,7 @@ function New() {
             value={newTask.endDate}
             onChange={handleChange}
           />
+          {errorTask.endDate && <ErrorMessage>{errorTask.endDate}</ErrorMessage>}
           <div className='flex justify-between'>
             <input
               type='text'
@@ -88,6 +138,7 @@ function New() {
               Add tag
             </button>
           </div>
+          {errorTask.tags && <ErrorMessage>{errorTask.tags}</ErrorMessage>}
           {newTask.tags.length > 0 ? (
             <ul className='flex flex-wrap gap-2'>{rendertags}</ul>
           ) : (

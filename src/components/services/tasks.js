@@ -10,7 +10,20 @@ export async function getTasks() {
   return tasks;
 }
 
-export async function createTask({ description, endDate, tags, status }) {
+export async function updateTask(id, newData) {
+  const tasks = await localforage.getItem('tasks');
+  const task = tasks.find((task) => task.id === id);
+  const index = tasks.findIndex((task) => task.id === id);
+  const newTask = {
+    ...task,
+    ...newData,
+  };
+  tasks.splice(index, 1, newTask);
+  await setStorage(tasks);
+  return newTask;
+}
+
+export async function createTask({ description, endDate, tags }) {
   const tasks = await getTasks();
   const id = Math.random().toString(36).substring(2, 9);
   const task = {
@@ -18,7 +31,7 @@ export async function createTask({ description, endDate, tags, status }) {
     description,
     endDate,
     tags,
-    status,
+    status: 'pending',
   };
   tasks.unshift(task);
   await setStorage(tasks);

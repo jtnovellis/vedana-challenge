@@ -1,1 +1,1 @@
-export const filterOptions = ['Tags', 'Status', 'End date'];
+export const filterOptions = ['Tags', 'Status', 'End today'];
