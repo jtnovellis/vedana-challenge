@@ -1,7 +1,10 @@
-function DropDStatus({ data }) {
+function DropDStatus({ data, handleStatus }) {
   const list = data.map((item) => (
     <li key={item.id} className='mb-3'>
-      <button className='bg-blue-700 text-white font-bold rounded-md p-2 w-[100px] hover:bg-blue-500'>
+      <button
+        onClick={() => handleStatus(item.id)}
+        className='bg-blue-700 text-white font-bold rounded-md p-2 w-[100px] hover:bg-blue-500'
+      >
         {item.name}
       </button>
     </li>

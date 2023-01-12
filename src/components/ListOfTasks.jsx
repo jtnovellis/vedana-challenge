@@ -1,4 +1,3 @@
-import React from 'react';
 import Task from './Task';
 
 function ListOfTasks({ tasks, newData }) {

@@ -3,7 +3,7 @@ import { deleteTag } from '../services/tags';
 import DropTag from './DropTag';
 
 function DropDown({ data, handleTag }) {
-  async function removeTag() {
+  async function removeTag(id) {
     await deleteTag(id);
   }
   const list = data.map((item) => (
