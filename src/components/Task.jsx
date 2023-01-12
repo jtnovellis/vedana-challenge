@@ -4,8 +4,9 @@ import {
   MdPanoramaFishEye,
   MdOutlineCheckCircleOutline,
 } from 'react-icons/md';
+import { deleteTask } from './services/tasks';
 
-function Task({ description = 'asdasdfaf', endDate = '2023-32-32', status = 'done' }) {
+function Task({ id, description, endDate, status }) {
   const [isDone, setDone] = useState(() => status === 'done');
 
   const Icon = isDone ? MdOutlineCheckCircleOutline : MdPanoramaFishEye;
@@ -13,6 +14,10 @@ function Task({ description = 'asdasdfaf', endDate = '2023-32-32', status = 'don
 
   function handleStatus() {
     setDone((prev) => !prev);
+  }
+
+  async function handleDelete(id) {
+    await deleteTask(id);
   }
 
   return (
@@ -25,7 +30,7 @@ function Task({ description = 'asdasdfaf', endDate = '2023-32-32', status = 'don
           <p>{description}</p>
           <p className='text-gray-600 text-xs'>{endDate}</p>
         </div>
-        <button className='absolute right-0'>
+        <button className='absolute right-0' onClick={() => handleDelete(id)}>
           <MdOutlineDeleteOutline size={28} color='#ff0000' />
         </button>
       </div>

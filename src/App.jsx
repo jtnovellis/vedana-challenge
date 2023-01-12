@@ -1,11 +1,12 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import New from './routes/New';
-import Root from './routes/Root';
+import Root, { loaderTasks } from './routes/Root';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
+    loader: loaderTasks,
   },
   {
     path: '/new',

@@ -2,7 +2,12 @@ import { Link } from 'react-router-dom';
 import Button from '../components/common/Button';
 import Header from '../components/Header';
 import ListOfTasks from '../components/ListOfTasks';
+import { getTasks } from '../components/services/tasks';
 import { filterOptions } from '../constants/filterOptions';
+
+export async function loaderTasks() {
+  return getTasks();
+}
 
 function Root() {
   const filters = filterOptions.map((filter, i) => (

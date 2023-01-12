@@ -1,14 +1,15 @@
 import React from 'react';
-import { tasks } from '../constants/tasks';
+import { useLoaderData } from 'react-router-dom';
 import Task from './Task';
 
 function ListOfTasks() {
+  const tasks = useLoaderData();
   const renderTasks = tasks.map((task) => (
     <li key={task.id}>
       <Task {...task} />
     </li>
   ));
-  return <ul className='p-2'>{renderTasks}</ul>;
+  return tasks.length > 0 ? <ul className='p-2'>{renderTasks}</ul> : <p>No Tasks</p>;
 }
 
 export default ListOfTasks;
