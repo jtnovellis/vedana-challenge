@@ -25,7 +25,7 @@ export async function updateTask(id, newData) {
 
 export async function createTask({ description, endDate, tags }) {
   const tasks = await getTasks();
-  const id = Math.random().toString(36).substring(2, 9);
+  let id = Math.random().toString(36).substring(2, 9);
   const task = {
     id,
     description,

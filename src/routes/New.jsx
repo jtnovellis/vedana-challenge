@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/common/Button';
 import ErrorMessage from '../components/ErrorMessage';
@@ -6,8 +6,10 @@ import Header from '../components/Header';
 import { createTask } from '../components/services/tasks';
 import Tag from '../components/Tag';
 import { initialTaskValues, errorValues } from '../constants/initialTaskValues';
+import { TaskContext } from '../context/TaskContext';
 
 function New() {
+  const { createNewTask } = useContext(TaskContext);
   const [tag, setTag] = useState('');
   const [newTask, setNewTask] = useState(initialTaskValues);
   const [errorTask, setErrorTask] = useState(errorValues);
@@ -35,12 +37,12 @@ function New() {
     }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     validations();
     if (newTask.description !== '' && newTask.endDate !== '' && newTask.tags !== 0) {
-      console.log('click');
-      createTask(newTask);
+      await createTask(newTask);
+      createNewTask(newTask);
       setNewTask(initialTaskValues);
       navigate('/');
     }
@@ -76,15 +78,15 @@ function New() {
         endDate: null,
       }));
     }
-    if (newTask.tags.length === 0) {
+    if (newTask.tags.length !== []) {
       setErrorTask((prev) => ({
         ...prev,
-        tags: 'Must to have at least one tag',
+        tags: null,
       }));
     } else {
       setErrorTask((prev) => ({
         ...prev,
-        tags: null,
+        tags: 'Must to have at least one tag',
       }));
     }
   }

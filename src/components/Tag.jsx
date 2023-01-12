@@ -4,12 +4,15 @@ function Tag({ id, name, deleteTag }) {
   function handleClick() {
     deleteTag(id);
   }
+
   return (
-    <div className='bg-gray-400 flex items-center w-fit p-1'>
-      <p className='text-gray-700 text-xs'>{`#${name}`}</p>
-      <button onClick={handleClick}>
-        <MdClear size={18} />
-      </button>
+    <div className='bg-gray-300 flex items-center w-fit p-1'>
+      <p className='text-gray-700 text-[10px]'>{`#${name}`}</p>
+      {deleteTag ? (
+        <button onClick={handleClick}>
+          <MdClear size={18} />
+        </button>
+      ) : null}
     </div>
   );
 }

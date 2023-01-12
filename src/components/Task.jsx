@@ -5,16 +5,17 @@ import {
   MdOutlineCheckCircleOutline,
 } from 'react-icons/md';
 import { deleteTask, updateTask } from './services/tasks';
+import Tag from './Tag';
 
-function Task({ id, description, endDate, status, removeTask }) {
+function Task({ id, description, endDate, status, tags, removeTask }) {
   const [isDone, setDone] = useState(() => status === 'done');
 
-  const Icon = isDone ? MdOutlineCheckCircleOutline : MdPanoramaFishEye;
-  const iconColor = isDone ? '#00ff00' : '#818181';
+  let Icon = isDone ? MdOutlineCheckCircleOutline : MdPanoramaFishEye;
+  let iconColor = isDone ? '#00ff00' : '#818181';
 
   async function handleStatus() {
     setDone((prev) => !prev);
-    const status = !isDone ? 'done' : 'pending';
+    let status = !isDone ? 'done' : 'pending';
     await updateTask(id, { status });
   }
 
@@ -22,6 +23,12 @@ function Task({ id, description, endDate, status, removeTask }) {
     removeTask(id);
     await deleteTask(id);
   }
+
+  const rendertags = tags.map((tag) => (
+    <li key={tag.id}>
+      <Tag name={tag.name} />
+    </li>
+  ));
 
   return (
     <div className='p-3 bg-white rounded-md mb-2'>
@@ -32,6 +39,7 @@ function Task({ id, description, endDate, status, removeTask }) {
         <div>
           <p>{description}</p>
           <p className='text-gray-600 text-xs'>{endDate}</p>
+          <ul className='hidden sm:flex flex-wrap gap-2 mt-2'>{rendertags}</ul>
         </div>
         <button className='absolute right-0' onClick={() => handleDelete(id)}>
           <MdOutlineDeleteOutline size={28} color='#ff0000' />
